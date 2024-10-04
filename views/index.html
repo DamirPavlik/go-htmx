@@ -2,13 +2,21 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title></title>
+        <title>your mom</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/index.css">
+        <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
     </head>
     <body>
-        Count {{ .Count }}
+        <div id="count">
+            {{ template "count" . }}
+        </div>
+        <button hx-post="/count" hx-target="#count">Count</button>
     </body>
 </html>
+{{ end }}
+
+{{ block "count" . }}
+    Count {{ .Count }}
 {{ end }}
