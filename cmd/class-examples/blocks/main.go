@@ -39,15 +39,20 @@ type Count struct {
 	Count int
 }
 
+var id int = 0
+
 type Contact struct {
 	Name  string
 	Email string
+	Id    int
 }
 
 func newContact(name, email string) Contact {
+	id++
 	return Contact{
 		Name:  name,
 		Email: email,
+		Id:    id,
 	}
 }
 
@@ -55,6 +60,15 @@ type Contacts = []Contact
 
 type Data struct {
 	Contacts Contacts
+}
+
+func (d *Data) indexOf(id int) int {
+	for i, contact := range d.Contacts {
+		if contact.Id == id {
+			return i
+		}
+	}
+	return -1
 }
 
 func (d *Data) hasEmail(email string) bool {
@@ -125,6 +139,20 @@ func main() {
 		c.Render(200, "form", newFormData())
 		return c.Render(200, "oob-contact", contact)
 
+	})
+
+	e.DELETE("/contacts/:id", func(c echo.Context) error {
+		idStr := c.Param("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return c.String(400, "Invalid id")
+		}
+		index := page.Data.indexOf(id)
+		if index == -1 {
+			return c.String(404, "Contact not found")
+		}
+		page.Data.Contacts = append(page.Data.Contacts[:index], page.Data.Contacts[index+1:]...)
+		return c.NoContent(200)
 	})
 
 	e.GET("/blocks", func(c echo.Context) error {
