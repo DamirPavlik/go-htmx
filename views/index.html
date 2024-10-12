@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/index.css">
         <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+        <link rel="stylesheet" href="/css/index.css">
     </head>
     <body>
         {{ template "form" .Form }}
@@ -52,8 +53,8 @@
 
 {{ block "contact" .}}
     <div style="display: flex;" id="contact-{{ .Id }}">
-        <div hx-delete="/contacts/{{ .Id }}" hx-swap="outerHTML" hx-target="#contact-{{ .Id }}" style="cursor: pointer;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+        <div hx-indicator="#ci-{{ .Id }}" hx-delete="/contacts/{{ .Id }}" hx-swap="outerHTML" hx-target="#contact-{{ .Id }}" style="cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6l-2 14H7L5 6h14z"></path>
                 <path d="M10 11v6"></path>
@@ -64,6 +65,9 @@
 
         Name: <span>{{ .Name }}</span>
         Email: <span>{{ .Email }}</span>
+        <div class="htmx-indicator" id="ci-{{ .Id }}">
+            <img src="/images/bars.svg" alt="loading" style="width: 1rem;">
+        </div>
     </div>
 {{ end }}
 
